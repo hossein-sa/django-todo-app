@@ -316,3 +316,46 @@ body {
 .auth-form button:hover {
     background-color: #159ab6;
 }
+
+.back-button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    text-align: center;
+    background-color: #ffffff;
+    color: #1fbbca;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+.back-button:hover {
+    background-color: #1fbbca;
+    color: #ffffff;
+}
+
+.messages {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.alert-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.alert-error {
+    background-color: #f44336;
+    color: white;
+}

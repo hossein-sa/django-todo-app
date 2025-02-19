@@ -6,46 +6,43 @@ from .forms import UserRegisterationForm, UserLoginForm
 from .models import UserProfile
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
+from django.contrib import messages
 
 
 @login_required
 def profile_view(request):
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
-
+    user = request.user
     if request.method == "POST":
-        first_name = request.POST.get("first_name", "").strip()
-        last_name = request.POST.get("last_name", "").strip()
-        password = request.POST.get("password", "").strip()
-        password_confirm = request.POST.get("password_confirm", "").strip()
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        avatar = request.FILES.get("avatar")
+        password = request.POST.get("password")
+        password_confirm = request.POST.get("password_confirm")
 
         # ذخیره نام و نام خانوادگی
-        if first_name:
-            request.user.first_name = first_name
-        if last_name:
-            request.user.last_name = last_name
-        request.user.save()
+        user.first_name = first_name
+        user.last_name = last_name
 
-        # تغییر پسورد (اگر مقدار جدید وارد شده باشد)
+        # ذخیره آواتار اگر آپلود شده باشد
+        if avatar:
+            user.userprofile.avatar = avatar
+
+        # تغییر پسورد اگر مقداردهی شده باشد
         if password and password_confirm:
             if password == password_confirm:
-                request.user.password = make_password(password)  # پسورد هش شود
-                request.user.save()
-                update_session_auth_hash(request, request.user)  # کاربر لاگ‌اوت نشود
+                user.set_password(password)  # تغییر پسورد
+                update_session_auth_hash(request, user)  # حفظ سشن لاگین
+                messages.success(request, "رمز عبور با موفقیت تغییر کرد.")
             else:
-                return render(request, "accounts/profile.html", {
-                    "profile": profile,
-                    "error": "رمز عبور و تکرار آن یکسان نیستند."
-                })
+                messages.error(request, "رمز عبور و تکرار آن مطابقت ندارند.")
 
-        # ذخیره تصویر پروفایل
-        if "avatar" in request.FILES:
-            profile.avatar = request.FILES["avatar"]
+        user.save()
+        user.userprofile.save()
 
-        profile.save()
-        return redirect("profile")
+        messages.success(request, "پروفایل با موفقیت به‌روزرسانی شد.")
+        return redirect("profile")  # ریدایرکت به صفحه پروفایل
 
-    return render(request, "accounts/profile.html", {"profile": profile})
-
+    return render(request, "accounts/profile.html", {"user": user})
 
 def register_view(request):
     if request.method == "POST":
