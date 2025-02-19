@@ -1,0 +1,248 @@
+@import "normalize.css";
+@import "fonts.css";
+html {
+    font-family: Vazir,Tahoma;
+}
+*{
+    box-sizing: border-box;
+    outline: none;
+}
+textarea,input,select,button{
+    font-family: inherit !important;
+}
+body{
+    background:linear-gradient(135deg,#1ebbca,#ebbca7);
+    min-height: 100vh;
+    color: #ffffff;
+}
+/********* main header ******/
+
+#navbar {
+    padding: 15px;
+    border-bottom: 2px solid rgba(255,255,255,.2);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+#navbar a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: normal;
+}
+#navbar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border:3px solid #ffffff;
+    vertical-align: middle;
+}
+#navbar .panel-link {
+    flex-grow: 1;
+}
+/**** main wrapper ***/
+
+#main-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 70px);
+}
+.headline {
+    color: #ffffff;
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 45px;
+    letter-spacing: -3px;
+    margin-bottom: 50px;
+}
+#todo-wrapper {
+    width: 100%;
+    max-width: 600px;
+}
+.todo-links{
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+.todo-links .todo-link{
+    color: #ffffff;
+    text-decoration: none;
+    padding: 5px;
+    opacity: .7;
+}
+.todo-links .todo-link:hover{
+    opacity:1;
+}
+.todo-entry{
+    width: 100%;
+    min-width: 200px;
+    height: 60px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 17px;
+    font-weight: 300;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 25px 40px -20px #3c4a56;
+    padding-left: 40px;
+}
+.todo-send-btn{
+    width: 30px;
+    height: 30px;
+    background-color: #1fbbca;
+    border: none;
+    border-radius: 30px;
+    font-size: 19px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    position: absolute;
+    top:15px;
+    left: 10px;
+
+}
+#todo-entry{
+    position: relative;
+}
+.todo-list-items {
+    width: 100%;
+    color: rgba(117, 117 , 117, .9);
+}
+.todo-list-items ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+.todo-list-item{
+    background-color: #ffffff;
+    padding: 10px;
+    margin: 20px 0px;
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+.todo-list-item .todo-subject {
+    flex-grow: 1;
+    margin: 0 10px;
+    font-size: 14px;
+}
+.todo-list-item input[type='checkbox'] {
+    display: none;
+}
+.todo-list-item label{
+    line-height: 0;
+}
+.todo-label-box{
+    width: 20px;
+    height: 20px;
+    border:2px solid #1fbbca;
+    display: block;
+    border-radius: 2px;
+    margin-right: 5px;
+    cursor: pointer;
+    position: relative;
+}
+.todo-list-item input[type='checkbox']:checked + .todo-label-box:after {
+    content: "";
+    display: block;
+    width: 6px;
+    height: 12px;
+    border: solid #1fbbca;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    position: absolute;
+    right: 4px;
+}
+.todo-item-delete-btn {
+    background-color: #1fbbca;
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    width: 25px;
+    height: 25px;
+    line-height: 0;
+    padding: 5px;
+    cursor: pointer;
+}
+.todo-list-item.done .todo-subject{
+    opacity: .7;
+    text-decoration: line-through;
+}
+#footer{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+/**** footer ***/
+
+#footer p{
+    font-size: 14px;
+    font-weight: 300;
+}
+/**** profile avatar *****/
+
+.avatar-edit{
+    margin-top: 20px;
+    margin-bottom: 50px;
+    text-align: center;
+    position: relative;
+}
+#avatar-select{
+    display: none;
+}
+.avatar-edit img{
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    margin-bottom: 10px;
+}
+.avatar-edit label{
+    position: absolute;
+    line-height: 150px;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    cursor: pointer;
+}
+.avatar-edit:hover img{
+    opacity: .3;
+}
+.form-wrapper{
+    width: 100%;
+    max-width: 300px;
+
+}
+.form-input {
+    height: 50px;
+    width: 100%;
+    min-width: 200px;
+    padding: 10px;
+    margin-bottom:15px ;
+    font-weight: 300;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 25px 40px -22px #3c4a56;
+}
+.form input[type='submit'] {
+    background-color: #1fbbca;
+    color: #ffffff;
+    height: 50px;
+    cursor: pointer;
+}
+
+
+
+
+
+
