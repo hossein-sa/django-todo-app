@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .forms import UserRegisterationForm, UserLoginForm
 from .models import UserProfile
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.hashers import make_password
 
 
 @login_required
@@ -13,14 +15,29 @@ def profile_view(request):
     if request.method == "POST":
         first_name = request.POST.get("first_name", "").strip()
         last_name = request.POST.get("last_name", "").strip()
+        password = request.POST.get("password", "").strip()
+        password_confirm = request.POST.get("password_confirm", "").strip()
 
+        # ذخیره نام و نام خانوادگی
         if first_name:
-            request.user.first_name = first_name  # Save first name
+            request.user.first_name = first_name
         if last_name:
-            request.user.last_name = last_name  # Save last name
+            request.user.last_name = last_name
+        request.user.save()
 
-        request.user.save()  # Save the user model
-        
+        # تغییر پسورد (اگر مقدار جدید وارد شده باشد)
+        if password and password_confirm:
+            if password == password_confirm:
+                request.user.password = make_password(password)  # پسورد هش شود
+                request.user.save()
+                update_session_auth_hash(request, request.user)  # کاربر لاگ‌اوت نشود
+            else:
+                return render(request, "accounts/profile.html", {
+                    "profile": profile,
+                    "error": "رمز عبور و تکرار آن یکسان نیستند."
+                })
+
+        # ذخیره تصویر پروفایل
         if "avatar" in request.FILES:
             profile.avatar = request.FILES["avatar"]
 

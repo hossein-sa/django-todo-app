@@ -1,20 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="headline">پروفایل</h1>
-<div class="form-wrapper">
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="avatar-edit">
-            <img src="{{ profile.avatar.url }}" alt="avatar picture">
-            <label for="avatar-select">ویرایش تصویر</label>
-            <input type="file" id="avatar-select" name="avatar">
-        </div>
+<div id="main-wrapper">
+    <h1 class="headline">پروفایل</h1>
+    <div class="form-wrapper">
+        <form method="post" enctype="multipart/form-data" class="form">
+            {% csrf_token %}
 
-        <input type="text" class="form-input" name="first_name" placeholder="نام" value="{{ request.user.first_name }}">
-        <input type="text" class="form-input" name="last_name" placeholder="نام خانوادگی" value="{{ request.user.last_name }}">
-        <input type="password" class="form-input" name="password" placeholder="پسورد">
-        <input type="password" class="form-input" name="confirm_password" placeholder="تکرار پسورد">
-        <input type="submit" class="form-input" value="ویرایش">
-    </form>
+            <!-- ویرایش تصویر پروفایل -->
+            <div class="avatar-edit">
+                {% if user.userprofile.avatar %}
+                    <img src="{{ user.userprofile.avatar.url }}" alt="avatar">
+                {% else %}
+                    <img src="/static/images/default-avatar.jpg" alt="avatar">
+                {% endif %}
+                <label for="avatar">ویرایش تصویر</label>
+                <input type="file" name="avatar" id="avatar">
+            </div>
+
+            <!-- فیلدهای نام و نام خانوادگی -->
+            <input type="text" name="first_name" class="form-input" value="{{ user.first_name }}" placeholder="نام">
+            <input type="text" name="last_name" class="form-input" value="{{ user.last_name }}" placeholder="نام خانوادگی">
+
+            <!-- فیلدهای تغییر رمز عبور -->
+            <input type="password" name="password" class="form-input" placeholder="پسورد جدید">
+            <input type="password" name="password_confirm" class="form-input" placeholder="تکرار پسورد">
+
+            <!-- دکمه ویرایش -->
+            <input type="submit" class="form-input" value="ویرایش">
+        </form>
+    </div>
 </div>
 {% endblock %}
