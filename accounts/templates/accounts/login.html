@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Login</h2>
-<form method="post">
+<h2>ورود</h2>
+<form method="post" class="auth-form">
     {% csrf_token %}
-    <input type="text" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
-    <button type="submit">Login</button>
+    
+    <label for="username">نام کاربری:</label>
+    <input type="text" name="username" placeholder="نام کاربری">
+
+    <label for="password">رمز عبور:</label>
+    <input type="password" name="password" placeholder="رمز عبور">
+
+    <button type="submit">ورود</button>
 </form>
-<p>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+
+<p>حساب کاربری ندارید؟ <a href="{% url 'register' %}">ثبت نام کنید</a></p>
 {% endblock %}

@@ -31,3 +31,13 @@ def toggle_task_status(request, task_id):
     task.save()
     return JsonResponse({"status": task.status})
 
+
+@login_required
+def delete_all_tasks(request):
+    Task.objects.filter(user=request.user).delete()
+    return redirect("todo_list")
+
+@login_required
+def delete_completed_tasks(request):
+    Task.objects.filter(user=request.user, status="completed").delete()
+    return redirect("todo_list")

@@ -11,16 +11,19 @@ def profile_view(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
 
     if request.method == "POST":
-        request.user.first_name = request.POST.get("first_name", "")
-        request.user.last_name = request.POST.get("last_name", "")
-        request.user.email = request.POST.get("email", "")
-        request.user.save()
-        
-        profile.bio = request.POST.get("bio", "")
+        first_name = request.POST.get("first_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+
+        if first_name:
+            request.user.first_name = first_name  # Save first name
+        if last_name:
+            request.user.last_name = last_name  # Save last name
+
+        request.user.save()  # Save the user model
         
         if "avatar" in request.FILES:
             profile.avatar = request.FILES["avatar"]
-        
+
         profile.save()
         return redirect("profile")
 

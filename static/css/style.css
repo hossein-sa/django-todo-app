@@ -241,6 +241,42 @@ body{
     cursor: pointer;
 }
 
+.auth-form {
+    display: flex;
+    flex-direction: column; /* فیلدها را زیر هم قرار می‌دهد */
+    max-width: 300px; /* عرض فرم را محدود می‌کند */
+    margin: 0 auto; /* فرم را در وسط صفحه قرار می‌دهد */
+}
+
+.auth-form label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.auth-form input {
+    width: 100%;
+    height: 40px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: right;
+}
+
+.auth-form button {
+    margin-top: 20px;
+    background-color: #1fbbca;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-form button:hover {
+    background-color: #159ab6;
+}
 
 
 
