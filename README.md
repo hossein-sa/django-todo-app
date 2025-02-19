@@ -93,10 +93,10 @@ Now visit **`http://127.0.0.1:8000/`** in your browser.
 ![Dashboard](screenshots/dashboard.png)
 
 ### 📌 Login Page
-![Login Page](screenshots/login-page.png)
+![Login Page](screenshots/login.png)
 
 ### 📌 Profile Page
-![Profile Page](screenshots/profile-page.png)
+![Profile Page](screenshots/profile.png)
 
 ---
 
