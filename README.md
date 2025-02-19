@@ -122,4 +122,4 @@ If you want to contribute, follow these steps:
 This project is **open-source** and available under the **MIT License**.
 
 ---
-**💡 Made with ❤️ by [Your Name]**
+**💡 Made with ❤️ by Hossein Sadeghi**
