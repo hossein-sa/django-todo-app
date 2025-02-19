@@ -1,25 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>To-Do List</h2>
+<h1 class="headline">پنل من</h1>
 
-<form method="post" action="{% url 'add_task' %}">
-    {% csrf_token %}
-    <input type="text" name="title" placeholder="Task Title" required>
-    <input type="text" name="description" placeholder="Description">
-    <button type="submit">Add</button>
-</form>
+<div id="todo-wrapper">
+    <div class="todo-links">
+        <a href="{% url 'delete_all_tasks' %}" class="todo-link">حذف همه</a>
+        <a href="{% url 'delete_completed_tasks' %}" class="todo-link">حذف انجام شده ها</a>
+    </div>
 
-<ul>
-    {% for task in tasks %}
-    <li>
-        <span>{{ task.title }}</span>
-        <button onclick="toggleTask({{ task.id }})">
-            {% if task.status == "completed" %} ✅ {% else %} ⏳ {% endif %}
-        </button>
-        <a href="{% url 'delete_task' task.id %}">❌</a>
-    </li>
-    {% endfor %}
-</ul>
+    <form method="post" id="todo-entry" action="{% url 'add_task' %}">
+        {% csrf_token %}
+        <input class="todo-entry" name="title" placeholder="قصد دارید چه کارهایی را برنامه ریزی کنید؟">
+        <button class="todo-send-btn" type="submit">+</button>
+    </form>
+
+    <div class="todo-list-items">
+        <ul>
+            {% for task in tasks %}
+                <li class="todo-list-item {% if task.status == 'completed' %}done{% endif %}">
+                    <input id="{{ task.id }}" type="checkbox" {% if task.status == 'completed' %}checked{% endif %}
+                           onclick="toggleTask({{ task.id }})">
+                    <label for="{{ task.id }}" class="todo-label-box"></label>
+                    <span class="todo-subject">{{ task.title }}</span>
+                    <a href="{% url 'delete_task' task.id %}" class="todo-item-delete-btn">&times;</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
 <script>
 function toggleTask(taskId) {
