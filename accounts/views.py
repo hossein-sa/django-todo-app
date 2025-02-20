@@ -5,14 +5,13 @@ from django.contrib.auth.models import User
 from .forms import UserRegisterationForm, UserLoginForm
 from .models import UserProfile
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.hashers import make_password
 from django.contrib import messages
-
+from PIL import Image, UnidentifiedImageError
 
 @login_required
 def profile_view(request):
     user = request.user
-    user_profile, created = UserProfile.objects.get_or_create(user=user)  # Ensure UserProfile exists
+    user_profile, created = UserProfile.objects.get_or_create(user=user)  # ایجاد پروفایل در صورت نبود آن
 
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -21,45 +20,54 @@ def profile_view(request):
         password = request.POST.get("password")
         password_confirm = request.POST.get("password_confirm")
 
-        # Update first name and last name
-        user.first_name = first_name
-        user.last_name = last_name
+        # به‌روزرسانی نام و نام خانوادگی
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
 
-        # Save avatar if uploaded
+        # بررسی و ذخیره‌ی تصویر آواتار در صورت آپلود
         if avatar:
+            try:
+                img = Image.open(avatar)
+                if img.format.lower() not in ['jpeg', 'png']:
+                    messages.error(request, "❌ فرمت فایل نامعتبر است. لطفاً یک تصویر با فرمت jpg، jpeg یا png بارگذاری کنید.")
+                    return redirect("profile")
+            except UnidentifiedImageError:
+                messages.error(request, "❌ فایل تصویر معتبر نیست. لطفاً یک تصویر معتبر بارگذاری کنید.")
+                return redirect("profile")
             user_profile.avatar = avatar
 
-        # Handle password change securely
+        # بررسی و تغییر رمز عبور
         if password and password_confirm:
             if password == password_confirm:
                 user.set_password(password)
-                update_session_auth_hash(request, user)  # Keep session active after password change
-                messages.success(request, "رمز عبور با موفقیت تغییر کرد.")
+                update_session_auth_hash(request, user)  # حفظ لاگین کاربر بعد از تغییر رمز
+                messages.success(request, "✅ رمز عبور شما با موفقیت تغییر کرد.")
             else:
-                messages.error(request, "رمز عبور و تکرار آن مطابقت ندارند.")
-                return redirect("profile")  # Stop execution and redirect if passwords don't match
+                messages.error(request, "❌ رمزهای وارد شده با یکدیگر مطابقت ندارند.")
+                return redirect("profile")  # در صورت خطا، اجرا متوقف شده و کاربر به صفحه پروفایل برمی‌گردد.
 
+        # ذخیره تغییرات
         user.save()
         user_profile.save()
 
-        messages.success(request, "پروفایل با موفقیت به‌روزرسانی شد.")
+        messages.success(request, "✅ پروفایل شما با موفقیت به‌روزرسانی شد.")
         return redirect("profile")
 
     return render(request, "accounts/profile.html", {"user": user})
 
-
-from django.contrib.auth.forms import UserCreationForm
 
 def register_view(request):
     if request.method == "POST":
         form = UserRegisterationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            UserProfile.objects.create(user=user)  # Ensure profile is created
-            messages.success(request, "ثبت‌نام با موفقیت انجام شد! لطفاً وارد شوید.")
+            UserProfile.objects.create(user=user)  # ایجاد پروفایل برای کاربر جدید
+            messages.success(request, "✅ ثبت‌نام شما با موفقیت انجام شد! لطفاً وارد حساب کاربری خود شوید.")
             return redirect("login")
         else:
-            messages.error(request, "خطایی در ثبت‌نام وجود دارد. لطفاً فرم را بررسی کنید.")
+            messages.error(request, "❌ مشکلی در ثبت‌نام وجود دارد. لطفاً اطلاعات خود را بررسی کنید.")
 
     else:
         form = UserRegisterationForm()
@@ -77,17 +85,18 @@ def login_view(request):
 
             if user:
                 login(request, user)
-                messages.success(request, "ورود موفقیت‌آمیز بود!")
-                return redirect("todo_list")  # Redirect after login
+                messages.success(request, "✅ ورود شما موفقیت‌آمیز بود! خوش آمدید 😊")
+                return redirect("todo_list")  # هدایت به صفحه لیست وظایف پس از ورود
             else:
-                messages.error(request, "نام کاربری یا رمز عبور اشتباه است.")
+                messages.error(request, "❌ نام کاربری یا رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.")
 
     else:
         form = UserLoginForm()
 
     return render(request, "accounts/login.html", {"form": form})
 
+
 def logout_view(request):
     logout(request)
-    messages.info(request, "شما با موفقیت خارج شدید.")
+    messages.info(request, "ℹ️ شما با موفقیت از حساب خود خارج شدید. به امید دیدار دوباره! 👋")
     return redirect("login")
