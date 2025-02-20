@@ -17,26 +17,37 @@
     <div class="todo-list-items">
         <ul>
             {% for task in tasks %}
-                <li class="todo-list-item {% if task.status == 'completed' %}done{% endif %}">
-                    <input id="{{ task.id }}" type="checkbox" {% if task.status == 'completed' %}checked{% endif %}
+                <li id="task-{{ task.id }}" class="todo-list-item {% if task.status == 'completed' %}done{% endif %}">
+                    <input id="checkbox-{{ task.id }}" type="checkbox" {% if task.status == 'completed' %}checked{% endif %}
                            onclick="toggleTask({{ task.id }})">
-                    <label for="{{ task.id }}" class="todo-label-box"></label>
+                    <label for="checkbox-{{ task.id }}" class="todo-label-box"></label>
                     <span class="todo-subject">{{ task.title }}</span>
                     <a href="{% url 'delete_task' task.id %}" class="todo-item-delete-btn">&times;</a>
                 </li>
             {% endfor %}
-        </ul>
+        </ul>        
     </div>
 </div>
 
 <script>
-function toggleTask(taskId) {
-    fetch(`/toggle/${taskId}/`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById(taskId).checked = data.status === 'completed';
-        });
-}
-</script>
+    function toggleTask(taskId) {
+        fetch(`/toggle/${taskId}/`)  // ارسال درخواست AJAX برای تغییر وضعیت تسک
+            .then(response => response.json())
+            .then(data => {
+                let taskItem = document.getElementById(`task-${taskId}`);
+                let checkbox = document.getElementById(`checkbox-${taskId}`);
+    
+                if (data.status === 'completed') {
+                    taskItem.classList.add('done');  // ✅ اگر تسک انجام شد، کلاس `done` اضافه شود
+                    checkbox.checked = true;
+                } else {
+                    taskItem.classList.remove('done');  // ✅ اگر تسک انجام نشد، کلاس `done` حذف شود
+                    checkbox.checked = false;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    </script>
+    
 
 {% endblock %}

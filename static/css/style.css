@@ -197,6 +197,7 @@ body {
 .todo-list-item.done .todo-subject {
     opacity: .7;
     text-decoration: line-through;
+    color: #777;
 }
 
 /* ======== FOOTER ======== */
