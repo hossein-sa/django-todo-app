@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>ثبت نام</h2>
+
 <form method="post" class="auth-form">
     {% csrf_token %}
+    
+    {{ form.as_p }}  <!-- Auto-render Django form fields with labels -->
 
-    <label for="username">نام کاربری:</label>
-    <input type="text" name="username" placeholder="نام کاربری">
-
-    <label for="email">ایمیل:</label>
-    <input type="email" name="email" placeholder="ایمیل">
-
-    <label for="password">رمز عبور:</label>
-    <input type="password" name="password" placeholder="رمز عبور">
-
-    <label for="password_confirm">تکرار رمز عبور:</label>
-    <input type="password" name="password_confirm" placeholder="تکرار رمز عبور">
-
-    <button type="submit">ثبت نام</button>
+    <button type="submit" class="btn">ثبت نام</button>
 </form>
+
+{% if form.errors %}
+    <div class="messages">
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
 
 <p>از قبل حساب کاربری دارید؟ <a href="{% url 'login' %}">وارد شوید</a></p>
 {% endblock %}

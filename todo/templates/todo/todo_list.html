@@ -10,7 +10,7 @@
 
     <form method="post" id="todo-entry" action="{% url 'add_task' %}">
         {% csrf_token %}
-        <input class="todo-entry" name="title" placeholder="قصد دارید چه کارهایی را برنامه ریزی کنید؟">
+        <input class="todo-entry" name="title" placeholder="قصد دارید چه کارهایی را برنامه ریزی کنید؟" required>
         <button class="todo-send-btn" type="submit">+</button>
     </form>
 
@@ -33,7 +33,9 @@
 function toggleTask(taskId) {
     fetch(`/toggle/${taskId}/`)
         .then(response => response.json())
-        .then(data => location.reload());
+        .then(data => {
+            document.getElementById(taskId).checked = data.status === 'completed';
+        });
 }
 </script>
 

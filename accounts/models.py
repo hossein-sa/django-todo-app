@@ -8,7 +8,7 @@ def user_avatar_path(instance, filename):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to=user_avatar_path, default='avatars/default.jpg')
+    avatar = models.ImageField(upload_to=user_avatar_path, default='images/avatar.jpg')
     bio = models.TextField(blank=True, null=True)
     
     

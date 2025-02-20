@@ -190,7 +190,7 @@ body {
     width: 25px;
     height: 25px;
     line-height: 0;
-    padding: 5px;
+    padding: 12px 9px;
     cursor: pointer;
 }
 
@@ -222,11 +222,11 @@ body {
     margin: auto;
     text-align: center;
 }
-
 .form-input {
-    height: 50px;
+    position: relative;
+    z-index: 5; /* Ensure inputs stay below the avatar */
     width: 100%;
-    min-width: 200px;
+    height: 50px;
     padding: 10px;
     margin-bottom: 15px;
     font-size: 16px;
@@ -243,6 +243,35 @@ body {
     cursor: pointer;
     font-weight: bold;
 }
+
+
+/* ======== Fix Avatar Overlapping ======== */
+.avatar-wrapper {
+    text-align: center;
+    margin-bottom: 20px; /* Ensure space below the avatar */
+    position: relative;
+    z-index: 10; /* Ensure avatar stays on top */
+}
+
+.avatar-wrapper img {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    display: block;
+    margin: 0 auto;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.avatar-wrapper img:hover {
+    opacity: 0.7; /* Indicate clickability */
+}
+
+.avatar-wrapper input[type="file"] {
+    display: none; /* Hide default file input */
+}
+
 
 .avatar-edit {
     margin-top: 20px;
@@ -358,4 +387,28 @@ body {
 .alert-error {
     background-color: #f44336;
     color: white;
+}
+
+/* ======== STYLE "ویرایش" BUTTON ======== */
+.edit-button {
+    width: 100%;
+    height: 50px;
+    background-color: #1fbbca;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button:hover {
+    background-color: #159ab6; /* Darker shade */
+}
+
+/* ======== HIDE FILE INPUT (Choose File) ======== */
+.avatar-edit input[type="file"] {
+    display: none;  /* Hide file input */
 }

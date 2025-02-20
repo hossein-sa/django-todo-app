@@ -1,28 +1,37 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import UserProfile
+from django.contrib.auth.forms import UserCreationForm
 
+class UserRegisterationForm(UserCreationForm):
+    username = forms.CharField(
+        label="نام کاربری", 
+        widget=forms.TextInput(attrs={'class': 'form-input',})
+    )
+    email = forms.EmailField(
+        label="ایمیل", 
+        widget=forms.EmailInput(attrs={'class': 'form-input',})
+    )
+    password1 = forms.CharField(
+        label="رمز عبور",
+        widget=forms.PasswordInput(attrs={'class': 'form-input',})
+    )
+    password2 = forms.CharField(
+        label="تکرار رمز عبور",
+        widget=forms.PasswordInput(attrs={'class': 'form-input',})
+    )
 
-class UserRegisterationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_confirm = forms.CharField(widget=forms.PasswordInput, label="confirm password")
-    
-    
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
-        
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        password_confirm = cleaned_data.get("password_confirm")
-        
-        if password and password_confirm and password != password_confirm:
-            self.add_error("password_confirm", "Password do not match.")
-            
-        return cleaned_data
+        fields = ['username', 'email', 'password1', 'password2']
     
     
 class UserLoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(
+        label="نام کاربری",
+        widget=forms.TextInput(attrs={'class':'from-input',})
+    )
+    password = forms.CharField(
+        label="رمز عبور",
+        widget=forms.PasswordInput(attrs={'class':'from-input',})
+        )

@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
 <div id="main-wrapper">
     <h1 class="headline">پروفایل</h1>
@@ -6,41 +8,51 @@
         <form method="post" enctype="multipart/form-data" class="form">
             {% csrf_token %}
 
-            <!-- ویرایش تصویر پروفایل -->
-            <div class="avatar-edit">
-                {% if user.userprofile.avatar %}
-                    <img src="{{ user.userprofile.avatar.url }}" alt="avatar">
-                {% else %}
-                    <img src="/static/images/default-avatar.jpg" alt="avatar">
-                {% endif %}
-                <label for="avatar">ویرایش تصویر</label>
-                <input type="file" name="avatar" id="avatar">
+            <!-- Avatar Upload (Fixed Logic) -->
+            <div class="avatar-wrapper">
+                <label for="avatar">
+                    {% if user.userprofile.avatar and user.userprofile.avatar.url != '/media/images/avatar.jpg' %}
+                        <img id="avatarPreview" src="{{ user.userprofile.avatar.url }}" alt="avatar">
+                    {% else %}
+                        <img id="avatarPreview" src="{% static 'images/avatar.jpg' %}" alt="avatar">
+                    {% endif %}
+                </label>
+                <input type="file" name="avatar" id="avatar" accept="image/*" onchange="previewAvatar(event)">
             </div>
 
-            <!-- فیلدهای نام و نام خانوادگی -->
-            <input type="text" name="first_name" class="form-input" value="{{ user.first_name }}" placeholder="نام">
-            <input type="text" name="last_name" class="form-input" value="{{ user.last_name }}" placeholder="نام خانوادگی">
+            <!-- Name Fields -->
+            <input type="text" name="first_name" class="form-input" value="{{ user.first_name }}" placeholder="نام" required>
+            <input type="text" name="last_name" class="form-input" value="{{ user.last_name }}" placeholder="نام خانوادگی" required>
 
-            <!-- فیلدهای تغییر رمز عبور -->
+            <!-- Password Change -->
             <input type="password" name="password" class="form-input" placeholder="پسورد جدید">
             <input type="password" name="password_confirm" class="form-input" placeholder="تکرار پسورد">
 
-            <!-- دکمه ویرایش -->
-            <input type="submit" class="form-input" value="ویرایش">
+            <button type="submit" class="edit-button">ویرایش</button>
         </form>
-        <!-- دکمه بازگشت به خانه -->
-<a href="{% url 'todo_list' %}" class="back-button">بازگشت به خانه</a>
 
+        <!-- Back to Home -->
+        <a href="{% url 'todo_list' %}" class="back-button">بازگشت به خانه</a>
+
+        <!-- Display Messages -->
         {% if messages %}
-<div class="messages">
-    {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
-        </div>
-    {% endfor %}
-</div>
-{% endif %}
-
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
+
+<script>
+function previewAvatar(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        document.getElementById('avatarPreview').src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+
 {% endblock %}
